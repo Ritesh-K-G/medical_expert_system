@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const Color primary = Color(0xFF4157FF);
   static const Color myBlue = Color.fromARGB(255, 58, 100, 228);
   static const Color splashBlue = Color.fromARGB(255, 70, 136, 220);
   static const Color myGreen = Color(0xFF35899B);
@@ -20,16 +21,16 @@ class AppColors {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color.fromARGB(255, 58, 100, 228), // Start color
-      Color(0xFF6246EA), // End color
+      Color.fromARGB(255, 58, 100, 228),
+      Color(0xFF6246EA),
     ],
   );
   static const Gradient whiteGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      Color(0xFFE3E3E7), // Start color
-      Color(0xFFE3E3E7), // End color
+      Color(0xFFE3E3E7),
+      Color(0xFFE3E3E7),
     ],
   );
 }
