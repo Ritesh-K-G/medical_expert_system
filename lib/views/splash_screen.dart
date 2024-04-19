@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:medical_expert_system/constants.dart';
+import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:medical_expert_system/views/homePage/homePage.dart';
 
 class splashScreen extends StatefulWidget {
@@ -15,13 +15,13 @@ class _splashScreenState extends State<splashScreen> {
   @override
   void initState() {
     super.initState();
-    // Timer(const Duration(seconds: 3), () {
-    //   Navigator.pushAndRemoveUntil(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => const homePage()),
-    //     (route) => false,
-    //   );
-    // });
+    Timer(const Duration(seconds: 1), () {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const homePage()),
+        (route) => false,
+      );
+    });
   }
 
   @override
@@ -35,26 +35,42 @@ class _splashScreenState extends State<splashScreen> {
             'assets/images/splash_screen.png',
             fit: BoxFit.cover,
           ),
-          Positioned(
-              child: Column(
-                children: [
-                  Stack(children: [
-                    Container(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Stack(children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Container(
                       width: 80,
                       height: 80,
                       decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
                         image: DecorationImage(
+                          scale: 0.5,
                           fit: BoxFit.cover,
                           image: AssetImage(
-                            'assets/images/splash_screen.png',
+                            'assets/images/iiita-logo.png',
                           ),
                         ),
                       ),
-                    )
-                  ]),
-                ],
-              ))
+                    ),
+                  ),
+                )
+              ]),
+              const SizedBox(height: 30),
+              const Text(
+                'Medical Expert System',
+                style: AppTextStyles.appHeader
+              )
+            ],
+          )
         ],
       ),
     );
