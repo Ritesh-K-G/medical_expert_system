@@ -25,4 +25,11 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     fontFamily: 'Hind',
   );
+
+  static const TextStyle buttontext = TextStyle(
+    fontSize: 18,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w700,
+    letterSpacing: 1.0,
+  );
 }
