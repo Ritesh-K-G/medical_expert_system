@@ -4,6 +4,7 @@ import 'package:medical_expert_system/utils/styles/button.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:medical_expert_system/utils/validators/validators.dart';
 import 'package:medical_expert_system/utils/wrappers/wrappers.dart';
+import 'package:medical_expert_system/views/question_screen/question_screen.dart';
 import 'package:medical_expert_system/views/splash_screen.dart';
 
 class homePage extends StatefulWidget {
@@ -37,23 +38,27 @@ class _homePageState extends State<homePage> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.20),
             Stack(children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFfffce3),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        scale: 0.5,
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                          'assets/images/iiita-logo.png',
+              Material(
+                elevation: 5,
+                shape: const CircleBorder(),
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    // color: Color(0xFFfffce3),
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          scale: 0.5,
+                          fit: BoxFit.cover,
+                          image: AssetImage(
+                            'assets/images/iiita-logo.png',
+                          ),
                         ),
                       ),
                     ),
@@ -111,7 +116,7 @@ class _homePageState extends State<homePage> {
                     keyboardType: TextInputType.number,
                     validator: AppValidators.validatePrice,
                   )),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -223,7 +228,7 @@ class _homePageState extends State<homePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => splashScreen(),
+                                    builder: (context) => question_screen(),
                                   ),
                                 );
                               },

@@ -19,6 +19,12 @@ class AppTextStyles {
     fontSize: 16
   );
 
+  static const TextStyle appBarText = TextStyle(
+      fontFamily: 'Overpass',
+      fontWeight: FontWeight.bold,
+      fontSize: 16
+  );
+
   static const TextStyle dropdownText = TextStyle(
     color: Colors.black,
     fontSize: 16,
@@ -31,5 +37,11 @@ class AppTextStyles {
     fontFamily: 'Poppins',
     fontWeight: FontWeight.w700,
     letterSpacing: 1.0,
+  );
+
+  static TextStyle questionText = TextStyle(
+    fontSize: 16,
+    fontFamily: 'Overpass',
+    color: const Color(0xFF090F47).withOpacity(0.45),
   );
 }
