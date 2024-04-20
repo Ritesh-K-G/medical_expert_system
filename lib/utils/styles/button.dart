@@ -3,7 +3,7 @@ import 'package:medical_expert_system/constants.dart';
 
 class AppButtonStyles {
   static const ButtonStyle authButtons = ButtonStyle(
-    backgroundColor: MaterialStatePropertyAll(AppColors.myBlue),
+    backgroundColor: MaterialStatePropertyAll(AppColors.primary),
     foregroundColor: MaterialStatePropertyAll(AppColors.white),
     fixedSize: MaterialStatePropertyAll(Size(200, 50)),
   );

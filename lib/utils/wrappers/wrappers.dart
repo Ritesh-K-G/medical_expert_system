@@ -9,7 +9,7 @@ class AppWrappers {
   }
 
   static Widget inputFieldWrapper(Widget child) => Container(
-    padding: const EdgeInsets.all(15.0),
+    padding: const EdgeInsets.all(16.0),
     decoration: const BoxDecoration(
         color: AppColors.myTextBoxGray,
         borderRadius: BorderRadius.all(Radius.circular(5.0))),
@@ -32,7 +32,7 @@ class AppWrappers {
         value: value,
         onChanged: onChanged,
         underline: Container(),
-        style: AppTextStyles.authHeader,
+        style: AppTextStyles.appHeader,
         icon: const Icon(Icons.arrow_drop_down),
         iconSize: 24,
         isExpanded: true,
