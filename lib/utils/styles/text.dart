@@ -42,6 +42,18 @@ class AppTextStyles {
   static TextStyle questionText = TextStyle(
     fontSize: 16,
     fontFamily: 'Overpass',
-    color: const Color(0xFF090F47).withOpacity(0.45),
+    color: const Color(0xFF090F47).withOpacity(0.75),
+  );
+
+  static const TextStyle optionText = TextStyle(
+    fontSize: 16,
+    fontFamily: 'Overpass',
+    fontWeight: FontWeight.bold
+  );
+
+  static TextStyle descriptionText = TextStyle(
+      fontSize: 16,
+      fontFamily: 'Overpass',
+      color: const Color(0xFF090F47).withOpacity(0.45)
   );
 }
