@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:medical_expert_system/controller/diseaseController.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:medical_expert_system/views/homePage/homePage.dart';
 

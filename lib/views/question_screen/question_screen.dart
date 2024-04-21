@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:medical_expert_system/constants.dart';
+import 'package:medical_expert_system/controller/diseaseController.dart';
 import 'package:medical_expert_system/utils/helpers/screen_size_helper.dart';
 import 'package:medical_expert_system/utils/styles/button.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:medical_expert_system/views/result_screen/showResult.dart';
-// import 'package:text_to_speech/text_to_speech.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class question_screen extends StatefulWidget {
   @override
@@ -15,7 +16,9 @@ class _question_screen extends State<question_screen> {
   int _selectedIndex = -1;
   int _expandedIndex = -1;
   double _criticalLevl = 1.0;
-  // TextToSpeech tts = TextToSpeech();
+  FlutterTts flutterTts = FlutterTts();
+  late DiseaseController diseaseController;
+  List<String> symptoms = [];
 
   @override
   void dispose() {
@@ -25,6 +28,44 @@ class _question_screen extends State<question_screen> {
   @override
   void initState() {
     super.initState();
+    diseaseController = DiseaseController();
+    (()async =>{
+      await diseaseController.loadDiseasesData().then((value) => getCurrentSymptoms())
+    })();
+  }
+
+  void getCurrentSymptoms() {
+    symptoms = diseaseController.getSymptoms();
+    if (symptoms.isEmpty) {
+      terminate();
+    }
+    symptoms.add('None of These');
+    symptoms.add('I have no other symptom');
+    setState(() {
+      _selectedIndex = -1;
+      _expandedIndex = -1;
+    });
+  }
+
+  void selectSymptom(String symptom) {
+    if (symptom == 'I have no other symptom') {
+      terminate();
+    }
+    diseaseController.selectSymptom(symptom);
+  }
+
+  void deleteSymptom() {
+    symptoms.removeLast();
+    symptoms.removeLast();
+    diseaseController.deleteSymptoms(symptoms);
+  }
+
+  void terminate() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => showResult(diseaseController: diseaseController)),
+          (route) => false,
+    );
   }
 
   @override
@@ -60,7 +101,7 @@ class _question_screen extends State<question_screen> {
               const SizedBox(height: 20),
               Expanded(
                   child: ListView.builder(
-                    itemCount: 5,
+                    itemCount: symptoms.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,7 +138,7 @@ class _question_screen extends State<question_screen> {
                                           const SizedBox(width: 10),
                                           Expanded(
                                             child: Text(
-                                                'Coughing',
+                                                symptoms[index],
                                                 softWrap: true,
                                                 style: AppTextStyles.optionText
                                                 .copyWith(
@@ -153,7 +194,7 @@ class _question_screen extends State<question_screen> {
                                                 style: AppTextStyles.descriptionText,
                                               )),
                                               IconButton(onPressed: () {
-                                                // tts.speak('Good Morning');
+                                                flutterTts.speak('The temperature of the body is increased in this case');
                                               }, icon: const Icon(Icons.volume_up_sharp))
                                             ],
                                           )
@@ -176,11 +217,17 @@ class _question_screen extends State<question_screen> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => showResult()),
-                            (route) => false,
-                      );
+                      if (_selectedIndex == (symptoms.length - 1)) {
+                        terminate();
+                      }
+                      else if (_selectedIndex == (symptoms.length - 2)) {
+                        deleteSymptom();
+                        getCurrentSymptoms();
+                      }
+                      else {
+                        selectSymptom(symptoms[_selectedIndex]);
+                        getCurrentSymptoms();
+                      }
                     },
                     style: AppButtonStyles.authButtons.copyWith(
                       minimumSize: MaterialStatePropertyAll(
