@@ -2,65 +2,69 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:collection';
 
-class SymptomSelector {
-  Map<String, Map<String, List<int>>> mp;
-  Map<String, Map<String, List<int>>> mpTemp;
+class Logic {
+  Map<String, Map<String, List<int>>> data;
+  Map<String, Map<String, List<int>>> tempData={};
   List<String> selectedSymptoms = [];
 
-  SymptomSelector(this.mp) {
-    mpTemp = Map.from(mp);
+  Logic(this.data) {
+    tempData = Map.from(data);
   }
 
-  int probabilitySum(String symptom, Map<String, Map<String, List<int>>> map) {
+  // Calculate the sum of probabilities for a given symptom
+  int probabilitySum(String symptom, Map<String, Map<String, List<int>>> tempData) {
     int sum = 0;
-    if (map.containsKey(symptom)) {
-      sum = map[symptom]!.values
-          .map((pair) => pair[0])
-          .reduce((value, element) => value + element);
+    if (tempData.containsKey(symptom)) {
+      sum = tempData[symptom]!.values.map((pair) => pair[0]).reduce((value, element) => value + element);
     }
     return sum;
   }
 
-  PriorityQueue<Pair<int, String>> firstScreen() {
-    PriorityQueue<Pair<int, String>> topDiseases = PriorityQueue(
-          (a, b) => b.first.compareTo(a.first),
-    );
+  // Method to get the top diseases based on probability sum
+  List<Pair<int, String>> symptom_to_be_presented() {
 
-    for (var symptom in mpTemp.keys) {
-      int probSum = probabilitySum(symptom, mpTemp);
+    List<Pair<int, String>> topDiseases = [];
+
+    for (var symptom in tempData.keys) {
+      int probSum = probabilitySum(symptom, tempData);
       topDiseases.add(Pair(probSum, symptom));
     }
+
+    // Sort the list based on probability sums
+    topDiseases.sort((a, b) => b.first.compareTo(a.first));
+
     return topDiseases;
   }
 
-  PriorityQueue<Pair<int, String>> furtherScreen(
-      String? input, Set<String> presentedSymptoms) {
-    if (mpTemp.length == 1) {
-      return endResult();
+  // Method to further filter diseases based on user input
+  List<Pair<int, String>> furtherScreen(String? input, Set<String> presentedSymptoms) {
+    if (tempData.length == 1) {
+      return termination();
     }
 
-    if (input != null && input != "No" && input != "None") {
-      mpTemp.removeWhere((disease, symptoms) =>
-      symptoms.containsKey(input) && symptoms[input]![0] > 0);
-      mpTemp.values.forEach((symptoms) => symptoms.remove(input));
-    } else if (input == "I have no symptom left") {
-      return endResult();
-    } else {
-      mpTemp.removeWhere(
-              (disease, symptoms) => symptoms.keys.toSet().containsAll(presentedSymptoms));
+    if (input != null && input != "None of these" && input != "I have no symptom left") {
+      tempData.removeWhere((disease, symptoms) => symptoms.containsKey(input) && symptoms[input]![0] > 0);
+      tempData.values.forEach((symptoms) => symptoms.remove(input));
     }
 
-    return firstScreen();
+    else if (input == "I have no symptom left") {
+      return termination();
+    }
+
+    else {
+      tempData.removeWhere((disease, symptoms) => symptoms.keys.toSet().containsAll(presentedSymptoms));
+    }
+
+    return symptom_to_be_presented();
   }
 
-  PriorityQueue<Pair<int, String>> endResult() {
+  // Method to get the end result after symptom selection
+  List<Pair<int, String>> termination() {
     print("Selected Symptoms: $selectedSymptoms");
 
-    PriorityQueue<Pair<int, String>> topDiseases = PriorityQueue(
-          (a, b) => b.first.compareTo(a.first),
-    );
+    List<Pair<int, String>> topDiseases = [];
 
-    mpTemp.forEach((disease, symptoms) {
+    tempData.forEach((disease, symptoms) {
       int probSum = 0;
       for (var symptom in selectedSymptoms) {
         if (symptoms.containsKey(symptom)) {
@@ -69,6 +73,9 @@ class SymptomSelector {
       }
       topDiseases.add(Pair(probSum, disease));
     });
+
+    // Sort the list based on probability sums
+    topDiseases.sort((a, b) => b.first.compareTo(a.first));
 
     return topDiseases;
   }
@@ -451,12 +458,12 @@ void main() {
     parsedData[disease] = symptomMap;
   });
 
-  SymptomSelector selector = SymptomSelector(parsedData);
 
-  // print("First Screen:");
-  print(selector.firstScreen());
+  // till this line data is parsed ...
 
-  // Example usage of furtherScreen
-  // print("\nFurther Screen:");
-  // print(selector.furtherScreen("Fatigue", {'Runny Nose', 'Headache'}));
+  // constructor is called;
+  Logic selector = Logic(parsedData);
+  //
+  print(selector.symptom_to_be_presented());
+
 }
