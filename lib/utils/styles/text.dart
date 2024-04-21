@@ -51,6 +51,12 @@ class AppTextStyles {
     fontWeight: FontWeight.bold
   );
 
+  static const TextStyle chanceText = TextStyle(
+      fontSize: 16,
+      fontFamily: 'Overpass',
+      fontWeight: FontWeight.w500
+  );
+
   static TextStyle descriptionText = TextStyle(
       fontSize: 16,
       fontFamily: 'Overpass',

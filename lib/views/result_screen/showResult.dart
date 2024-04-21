@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:medical_expert_system/constants.dart';
 import 'package:medical_expert_system/utils/helpers/screen_size_helper.dart';
 import 'package:medical_expert_system/utils/styles/button.dart';
@@ -52,6 +53,49 @@ class _showResult extends State<showResult> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
+                'Selected symptoms:',
+                softWrap: true,
+                style: AppTextStyles.questionText,
+              ),
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: List.generate(
+                  6,
+                      (index) => Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.05),
+                      border: Border.all(color: AppColors.primary),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                      child: Text(
+                        index % 2 == 0 ? 'Coughing' : 'Batman Superman',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Suggestions:',
+                softWrap: true,
+                style: AppTextStyles.questionText.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Gemini Suggestions',
+                softWrap: true,
+                style: AppTextStyles.questionText
+              ),
+              const SizedBox(height: 20),
+              Text(
                 'The predicted diseases according to your symptoms:',
                 softWrap: true,
                 style: AppTextStyles.questionText,
@@ -69,96 +113,72 @@ class _showResult extends State<showResult> {
                             child: Container(
                               decoration: BoxDecoration(
                                 border: Border.all(
-                                  color: _selectedIndex == index ? AppColors.primary : AppColors.borderGrey,
+                                  color: AppColors.borderGrey,
                                   width: 0.5,
                                 ),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedIndex = (_selectedIndex == index ? -1 : index);
-                                    });
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          const SizedBox(width: 8),
-                                          Icon(
-                                            _selectedIndex == index ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                                            color: _selectedIndex == index ? AppColors.primary : null,
-                                            size: 20,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const SizedBox(width: 25),
+                                        Expanded(
+                                          child: Text(
+                                              'Coughing',
+                                              softWrap: true,
+                                              style: AppTextStyles.optionText
+                                                  .copyWith(
+                                                  color: Colors.black
+                                              )
                                           ),
-                                          const SizedBox(width: 10),
-                                          Expanded(
-                                            child: Text(
-                                                'Coughing',
-                                                softWrap: true,
-                                                style: AppTextStyles.optionText
-                                                    .copyWith(
-                                                    color: _selectedIndex == index ? AppColors.primary : Colors.black
-                                                )
-                                            ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              _expandedIndex = _expandedIndex == index ? -1 : index;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            _expandedIndex == index ? Icons.expand_less : Icons.expand_more,
                                           ),
-                                          IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _expandedIndex = _expandedIndex == index ? -1 : index;
-                                              });
-                                            },
-                                            icon: Icon(
-                                              _expandedIndex == index ? Icons.expand_less : Icons.expand_more,
-                                            ),
-                                          ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                    if (_expandedIndex == index)
+                                      Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(width: 33),
+                                                  Text('90% chance', style: AppTextStyles.chanceText),
+                                                ],
+                                              ),
+                                              Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  const SizedBox(width: 33),
+                                                  Expanded(child: Text(
+                                                    'The temperature of the body is increased in this case',
+                                                    softWrap: true,
+                                                    style: AppTextStyles.descriptionText,
+                                                  )),
+                                                  IconButton(onPressed: () {
+                                                    // tts.speak('Good Morning');
+                                                  }, icon: const Icon(Icons.volume_up_sharp))
+                                                ],
+                                              )
+                                            ],
+                                          )
                                       ),
-                                      if (_selectedIndex == index)
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(height: 8.0),
-                                            Text(
-                                              'Severity level: $_criticalLevl',
-                                              style: AppTextStyles.formLabelStyle,
-                                            ),
-                                            const SizedBox(height: 8.0),
-                                            Slider(
-                                              value: _criticalLevl,
-                                              min: 1.0,
-                                              max: 3.0,
-                                              divisions: 2,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _criticalLevl = value;
-                                                });
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      if (_expandedIndex == index)
-                                        Padding(
-                                            padding: const EdgeInsets.all(2.0),
-                                            child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                const SizedBox(width: 33),
-                                                Expanded(child: Text(
-                                                  'The temperature of the body is increased in this case',
-                                                  softWrap: true,
-                                                  style: AppTextStyles.descriptionText,
-                                                )),
-                                                IconButton(onPressed: () {
-                                                  // tts.speak('Good Morning');
-                                                }, icon: const Icon(Icons.volume_up_sharp))
-                                              ],
-                                            )
-                                        ),
-                                    ],
-                                  ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -168,32 +188,9 @@ class _showResult extends State<showResult> {
                       );
                     },
                   )
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                    },
-                    style: AppButtonStyles.authButtons.copyWith(
-                      minimumSize: MaterialStatePropertyAll(
-                          Size(AppHelpers.screenWidth(context) * 0.8, 50)),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                      ),
-                    ),
-                    child: const Text(
-                      "Next",
-                      style: AppTextStyles.buttontext,
-                    ),
-                  ),
-                ],
               )
-            ],
-          ),
+            ]
+          )
         )
     );
   }
