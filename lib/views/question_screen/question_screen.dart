@@ -3,6 +3,7 @@ import 'package:medical_expert_system/constants.dart';
 import 'package:medical_expert_system/utils/helpers/screen_size_helper.dart';
 import 'package:medical_expert_system/utils/styles/button.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
+import 'package:medical_expert_system/views/result_screen/showResult.dart';
 // import 'package:text_to_speech/text_to_speech.dart';
 
 class question_screen extends StatefulWidget {
@@ -175,6 +176,11 @@ class _question_screen extends State<question_screen> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => showResult()),
+                            (route) => false,
+                      );
                     },
                     style: AppButtonStyles.authButtons.copyWith(
                       minimumSize: MaterialStatePropertyAll(
