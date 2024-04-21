@@ -5,12 +5,12 @@ import 'package:medical_expert_system/utils/styles/button.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 // import 'package:text_to_speech/text_to_speech.dart';
 
-class question_screen extends StatefulWidget {
+class showResult extends StatefulWidget {
   @override
-  _question_screen createState() => _question_screen();
+  _showResult createState() => _showResult();
 }
 
-class _question_screen extends State<question_screen> {
+class _showResult extends State<showResult> {
   int _selectedIndex = -1;
   int _expandedIndex = -1;
   double _criticalLevl = 1.0;
@@ -52,7 +52,7 @@ class _question_screen extends State<question_screen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Choose the symptom you are affected with:',
+                'The predicted diseases according to your symptoms:',
                 softWrap: true,
                 style: AppTextStyles.questionText,
               ),
@@ -99,8 +99,8 @@ class _question_screen extends State<question_screen> {
                                                 'Coughing',
                                                 softWrap: true,
                                                 style: AppTextStyles.optionText
-                                                .copyWith(
-                                                  color: _selectedIndex == index ? AppColors.primary : Colors.black
+                                                    .copyWith(
+                                                    color: _selectedIndex == index ? AppColors.primary : Colors.black
                                                 )
                                             ),
                                           ),
@@ -141,21 +141,21 @@ class _question_screen extends State<question_screen> {
                                         ),
                                       if (_expandedIndex == index)
                                         Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(width: 33),
-                                              Expanded(child: Text(
-                                                'The temperature of the body is increased in this case',
-                                                softWrap: true,
-                                                style: AppTextStyles.descriptionText,
-                                              )),
-                                              IconButton(onPressed: () {
-                                                // tts.speak('Good Morning');
-                                              }, icon: const Icon(Icons.volume_up_sharp))
-                                            ],
-                                          )
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const SizedBox(width: 33),
+                                                Expanded(child: Text(
+                                                  'The temperature of the body is increased in this case',
+                                                  softWrap: true,
+                                                  style: AppTextStyles.descriptionText,
+                                                )),
+                                                IconButton(onPressed: () {
+                                                  // tts.speak('Good Morning');
+                                                }, icon: const Icon(Icons.volume_up_sharp))
+                                              ],
+                                            )
                                         ),
                                     ],
                                   ),
