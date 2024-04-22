@@ -119,7 +119,7 @@ class _showResult extends State<showResult> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                      'Gemini Suggestions',
+                      widget.suggestions,
                       softWrap: true,
                       style: AppTextStyles.questionText
                   ),

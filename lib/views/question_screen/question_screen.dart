@@ -92,7 +92,7 @@ class _question_screen extends State<question_screen> {
     final dio = Dio();
     try {
           var res = await dio.post(
-            'http://localhost:3000/user',
+            'https://medical-expert-system-backend-1.onrender.com/user',
             data: {
               'age': widget.age,
               'gender': widget.gender,
