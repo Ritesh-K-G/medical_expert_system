@@ -92,13 +92,14 @@ class _question_screen extends State<question_screen> {
     final dio = Dio();
     try {
           var res = await dio.post(
-            'https://medical-expert-system-backend-1.onrender.com/user',
+            'https://medical-expert-system-backend-3.onrender.com/user',
             data: {
               'age': widget.age,
               'gender': widget.gender,
               'symptoms': diseaseController.mySelectedSymptoms()
           });
-          suggestions = res.data;
+          String temp = res.data;
+          suggestions = temp.replaceAll('*', '');
           print(suggestions);
     }
     catch(e) {

@@ -4,6 +4,7 @@ import 'package:medical_expert_system/constants.dart';
 import 'package:medical_expert_system/controller/descrptionController.dart';
 import 'package:medical_expert_system/controller/diseaseController.dart';
 import 'package:medical_expert_system/models/pair.dart';
+import 'package:medical_expert_system/utils/helpers/screen_size_helper.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -68,75 +69,77 @@ class _showResult extends State<showResult> {
             const SizedBox(width: 10)
           ],
         ),
-        body: Padding(
-            padding: const EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 20),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Selected symptoms:',
-                    softWrap: true,
-                    style: AppTextStyles.questionText,
-                  ),
-                  const SizedBox(height: 20),
-                  if (mySelectedSymptoms.isEmpty)
-                    const Text(
-                      'No symptoms selected',
+        body: SingleChildScrollView(
+          child: Padding(
+              padding: const EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 20),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Selected symptoms:',
                       softWrap: true,
-                      style: AppTextStyles.chanceText,
+                      style: AppTextStyles.questionText,
                     ),
-                  Wrap(
-                    spacing: 8.0,
-                    runSpacing: 8.0,
-                    children: List.generate(
-                      mySelectedSymptoms.length,
-                          (index) => Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.05),
-                          border: Border.all(color: AppColors.primary),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                          child: Text(
-                            isEnglish
-                              ? mySelectedSymptoms[index]
-                              : widget.DescriptionController.diseases[mySelectedSymptoms[index]]!.hindiName,
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 14.0,
+                    const SizedBox(height: 20),
+                    if (mySelectedSymptoms.isEmpty)
+                      const Text(
+                        'No symptoms selected',
+                        softWrap: true,
+                        style: AppTextStyles.chanceText,
+                      ),
+                    Wrap(
+                      spacing: 8.0,
+                      runSpacing: 8.0,
+                      children: List.generate(
+                        mySelectedSymptoms.length,
+                            (index) => Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.05),
+                            border: Border.all(color: AppColors.primary),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                            child: Text(
+                              isEnglish
+                                  ? mySelectedSymptoms[index]
+                                  : widget.DescriptionController.diseases[mySelectedSymptoms[index]]!.hindiName,
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 14.0,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'Suggestions:',
-                    softWrap: true,
-                    style: AppTextStyles.questionText.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                      widget.suggestions,
+                    const SizedBox(height: 20),
+                    Text(
+                      'Suggestions:',
                       softWrap: true,
-                      style: AppTextStyles.questionText
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'The predicted diseases according to your symptoms:',
-                    softWrap: true,
-                    style: AppTextStyles.questionText,
-                  ),
-                  const SizedBox(height: 20),
-                  if (myPotentialDiseases.isEmpty)
-                    const Text(
-                      'You must select some symptoms to predict your disease',
-                      softWrap: true,
-                      style: AppTextStyles.chanceText,
+                      style: AppTextStyles.questionText.copyWith(fontWeight: FontWeight.bold),
                     ),
-                  Expanded(
+                    const SizedBox(height: 8),
+                    Text(
+                        widget.suggestions,
+                        softWrap: true,
+                        style: AppTextStyles.questionText
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'The predicted diseases according to your symptoms:',
+                      softWrap: true,
+                      style: AppTextStyles.questionText,
+                    ),
+                    const SizedBox(height: 20),
+                    if (myPotentialDiseases.isEmpty)
+                      const Text(
+                        'You must select some symptoms to predict your disease',
+                        softWrap: true,
+                        style: AppTextStyles.chanceText,
+                      ),
+                    SizedBox(
+                      height: AppHelpers.screenHeight(context) * 0.6,
                       child: ListView.builder(
                         itemCount: myPotentialDiseases.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -164,8 +167,8 @@ class _showResult extends State<showResult> {
                                             Expanded(
                                               child: Text(
                                                   isEnglish
-                                                    ? myPotentialDiseases[index].first
-                                                    : widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.hindiName,
+                                                      ? myPotentialDiseases[index].first
+                                                      : widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.hindiName,
                                                   softWrap: true,
                                                   style: AppTextStyles.optionText
                                                       .copyWith(
@@ -195,23 +198,33 @@ class _showResult extends State<showResult> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       const SizedBox(width: 33),
-                                                      Text('${myPotentialDiseases[index].second.first}% chance', style: AppTextStyles.chanceText),
-                                                      const SizedBox(width: 33),
-                                                      Text(
-                                                        isEnglish
-                                                          ? criticalTxt[myPotentialDiseases[index].second.second - 1]
-                                                          : criticalHindiTxt[myPotentialDiseases[index].second.second - 1]
-                                                      , style: AppTextStyles.chanceText),
+                                                      Text('${myPotentialDiseases[index].second.first}% chance', style: AppTextStyles.chanceText)
                                                     ],
                                                   ),
+                                                  const SizedBox(height: 8),
+                                                  Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      const SizedBox(width: 33),
+                                                      Text(
+                                                          'Criticality: ${
+                                                              isEnglish
+                                                                  ? criticalTxt[myPotentialDiseases[index].second.second - 1]
+                                                                  : criticalHindiTxt[myPotentialDiseases[index].second.second - 1]
+                                                          }'
+                                                          , softWrap: true
+                                                          , style: AppTextStyles.chanceText),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(height: 8),
                                                   Row(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       const SizedBox(width: 33),
                                                       Expanded(child: Text(
-                                                          isEnglish
-                                                              ? widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.description
-                                                              : widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.hindiDescription,
+                                                        isEnglish
+                                                            ? widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.description
+                                                            : widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.hindiDescription,
                                                         softWrap: true,
                                                         style: AppTextStyles.descriptionText,
                                                       )),
@@ -243,10 +256,11 @@ class _showResult extends State<showResult> {
                             ],
                           );
                         },
-                      )
-                  )
-                ]
-            )
+                      ),
+                    )
+                  ]
+              )
+          ),
         )
     );
   }

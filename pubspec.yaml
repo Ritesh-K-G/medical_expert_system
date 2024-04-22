@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_tts: ^4.0.2
+  flutter_tts: ^3.0.0
   dio: ^5.4.3+1
 
   # The following adds the Cupertino Icons font to your application.
@@ -95,5 +95,3 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: "AppIcon"
   image_path: "assets/images/logo.png"
-  min_sdk_android: 21
-  remove_alpha_ios: true
