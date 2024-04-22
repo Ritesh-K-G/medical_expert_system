@@ -71,6 +71,12 @@
     "english_description": "Inflammation of the bronchial tubes, often caused by viral or bacterial infection, leading to coughing and difficulty breathing.",
     "hindi_description": "ब्रोंकियल ट्यूब की सूजन, जो कि अक्सर वायरल या बैक्टीरियल संक्रमण के कारण होती है, जिससे खांसी और सांस लेने में कठिनाई होती है।"
   },
+  "Common Cold": {
+    "english_name": "Common Cold",
+    "hindi_name": "सामान्य ठंड",
+    "english_description": "A viral infection of the upper respiratory tract that can cause symptoms such as sneezing, runny or stuffy nose, sore throat, coughing, and mild fatigue.",
+    "hindi_description": "ऊपरी श्वसन तंत्र का वायरल संक्रमण जो छींकने, बहती या बंद नाक, गले में खराश, खांसी और हल्के थकान के लक्षण पैदा कर सकता है।"
+  },
   "Cellulitis": {
     "english_name": "Cellulitis",
     "hindi_name": "सेल्यूलाइटिस",
