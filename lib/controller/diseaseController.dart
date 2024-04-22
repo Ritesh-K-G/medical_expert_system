@@ -8,6 +8,7 @@ class DiseaseController{
   Map<String, Map<String, Pair<int, int>>> diseasesMap = {};
   Map<String, Map<String, Pair<int, int>>> tempDataset = {};
   List<String> selectedSymptoms = [];
+  Map<String, int> criticalLvl = {};
 
   Future<void> loadDiseasesData() async {
     String jsonString = await rootBundle.loadString('assets/dataset/dataset.json');
@@ -74,11 +75,16 @@ class DiseaseController{
     });
   }
 
+  void setCritical(String symptom, int lvl) {
+    criticalLvl[symptom] = lvl;
+  }
+
   List<String> mySelectedSymptoms() {
     return selectedSymptoms;
   }
 
-  List<Pair<String, int>> getPotentialDiseases() {
+  List<Pair<String, Pair<int, int>>> getPotentialDiseases() {
+    Map<String, int> criticalLevelObtained = {};
     if (selectedSymptoms.isEmpty) {
       return [];
     }
@@ -86,23 +92,34 @@ class DiseaseController{
     diseasesMap.forEach((disease, data) {
       double denom = 0.0;
       double num = 0.0;
+      int criticalSum = 0;
+      int sever = 0;
       data.forEach((symptom, value) {
         denom += value.first;
+        criticalSum += value.second;
         if (selectedSymptoms.contains(symptom)) {
           num += value.first;
+          sever += criticalLvl[symptom]!;
         }
       });
+      if (sever < (criticalSum / 2)) {
+        criticalLevelObtained[disease] = 1;
+      }
+      else if (sever <= criticalSum) {
+        criticalLevelObtained[disease] = 2;
+      }
+      else {
+        criticalLevelObtained[disease] = 3;
+      }
       double val = num / denom;
-      print(disease);
-      print(val);
       Pair<double, String> obj = Pair(val, disease);
       temp.add(obj);
     });
     temp.sort((a, b) => b.first.compareTo(a.first));
-    List<Pair<String, int>> potentialDiseases = [];
+    List<Pair<String, Pair<int, int>>> potentialDiseases = [];
     for (int i=0; i<min(temp.length, 5); i++) {
       int val = (temp[i].first * 100).toInt();
-      Pair<String, int> obj = Pair(temp[i].second, val);
+      Pair<String, Pair<int, int>> obj = Pair(temp[i].second, Pair(val, criticalLevelObtained[temp[i].second]!));
       potentialDiseases.add(obj);
     }
     return potentialDiseases;

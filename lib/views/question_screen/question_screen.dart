@@ -28,8 +28,6 @@ class _question_screen extends State<question_screen> {
   descriptionController DescriptionController = descriptionController();
   bool isEnglish = true;
 
-
-
   @override
   void dispose() {
     super.dispose();
@@ -64,6 +62,7 @@ class _question_screen extends State<question_screen> {
     if (symptom == 'I have no other symptom') {
       terminate();
     }
+    diseaseController.setCritical(symptom, _criticalLevl.toInt());
     diseaseController.selectSymptom(symptom);
   }
 

@@ -20,8 +20,18 @@ class _showResult extends State<showResult> {
   int _expandedIndex = -1;
   FlutterTts flutterTts = FlutterTts();
   List<String> mySelectedSymptoms = [];
-  List<Pair<String, int>> myPotentialDiseases = [];
+  List<Pair<String, Pair<int, int>>> myPotentialDiseases = [];
   bool isEnglish = true;
+  List<String> criticalTxt = [
+    'Minor',
+    'Needs Attention',
+    'Severe'
+  ];
+  List<String> criticalHindiTxt = [
+    'कम गंभीर',
+    'ध्यान देने की ज़रूरत है',
+    'गंभीर'
+  ];
 
   @override
   void dispose() {
@@ -185,7 +195,13 @@ class _showResult extends State<showResult> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       const SizedBox(width: 33),
-                                                      Text('${myPotentialDiseases[index].second}% chance', style: AppTextStyles.chanceText),
+                                                      Text('${myPotentialDiseases[index].second.first}% chance', style: AppTextStyles.chanceText),
+                                                      const SizedBox(width: 33),
+                                                      Text(
+                                                        isEnglish
+                                                          ? criticalTxt[myPotentialDiseases[index].second.second - 1]
+                                                          : criticalHindiTxt[myPotentialDiseases[index].second.second - 1]
+                                                      , style: AppTextStyles.chanceText),
                                                     ],
                                                   ),
                                                   Row(
