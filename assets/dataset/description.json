@@ -702,5 +702,59 @@
     "hindi_name": "डिप्रेशन",
     "english_description": "Mood disorder characterized by persistent sadness, loss of interest or pleasure, and feelings of hopelessness or worthlessness.",
     "hindi_description": "ध्यान विकार जो निरंतर उदासी, रुचि या आनंद की हानि, और निराशा या निरर्थकता की भावनाओं से चिंता करता है।"
-  }
+  },
+  "Difficulty in Swallowing": {
+    "english_name": "Difficulty in Swallowing",
+    "english_description": "Difficulty or discomfort experienced while swallowing food or liquids.",
+    "hindi_name": "पानी या ठोस पदार्थ निगलने में कठिनाई",
+    "hindi_description": "खाने या तरल पदार्थों को निगलते समय अनुभव की गई कठिनाई या असहजता।"
+  },
+  "Eye Pain": {
+    "english_name": "Eye Pain",
+    "english_description": "Pain or discomfort felt in or around the eyes, often due to various eye conditions or injuries.",
+    "hindi_name": "आँखों में दर्द",
+    "hindi_description": "आँखों में या आसपास अनुभूत की गई दर्द या असहजता, अक्सर विभिन्न नेत्र संबंधी स्थितियों या चोटों के कारण।"
+  },
+  "Heart Burn": {
+    "english_name": "Heart Burn",
+    "english_description": "Burning sensation or discomfort in the chest or throat, often due to acid reflux into the esophagus.",
+    "hindi_name": "दिल का जलन",
+    "hindi_description": "सीने या गले में जलन या असहजता, अक्सर अपने पाचन प्रणाली में एसोफेगस में एसिड का अवशोषण के कारण।"
+  },
+  "Crepitus": {
+    "english_name": "Crepitus",
+    "english_description": "Crackling or popping sensation or sound that occurs in joints or tissues during movement.",
+    "hindi_name": "शिकन",
+    "hindi_description": "जोड़ों या ऊतकों में चलन के दौरान होने वाली फुटफुटाहट या झनकारी अनुभूति या ध्वनि।"
+  },
+  "Coughing up blood": {
+    "english_name": "Coughing up blood",
+    "english_description": "Coughing that produces blood, indicating potential underlying health issues.",
+    "hindi_name": "खून उगलना",
+    "hindi_description": "खांसने के द्वारा खून उत्पन्न करना, संभावित आंतरिक स्वास्थ्य समस्याओं का संकेत देता है।"
+  },
+  "Epistaxis": {
+    "english_name": "Epistaxis",
+    "english_description": "Bleeding from the nose, often caused by factors like dry air, injury, or underlying health conditions.",
+    "hindi_name": "नाक से खून बहना",
+    "hindi_description": "नाक से खून बहना, अक्सर सूखे हवा, चोट या आंतरिक स्वास्थ्य स्थितियों जैसे कारकों के कारण।"
+  },
+  "Bloating": {
+    "english_name": "Bloating",
+    "english_description": "Feeling of fullness, tightness, or swelling in the abdomen due to excess gas or fluid buildup.",
+    "hindi_name": "पेट में सूजन",
+    "hindi_description": "अतिरिक्त गैस या तरल पदार्थ के निर्माण के कारण पेट में भराई, कसावट या सूजन का अनुभव।"
+  },
+  "I have no other symptom": {
+    "english_name": "I have no other symptom",
+    "hindi_name": "मेरे पास कोई और लक्षण नहीं है।",
+    "english_description": "I have no other symptom",
+    "hindi_description": "मेरे पास कोई और लक्षण नहीं है।"
+  },
+  "None of These": {
+    "english_name": "None of These",
+    "hindi_name": "मेरे पास उपर विस्तृत किए गए कोई लक्षण नहीं हैं।",
+    "english_description": "None of These",
+    "hindi_description": "मेरे पास उपर विस्तृत किए गए कोई लक्षण नहीं हैं।"
+  },
 }
