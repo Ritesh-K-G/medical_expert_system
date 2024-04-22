@@ -228,7 +228,7 @@ class _homePageState extends State<homePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => question_screen(),
+                                    builder: (context) => question_screen(age: int.parse(_ageController.text), gender: selectedGenderValue),
                                   ),
                                 );
                               },

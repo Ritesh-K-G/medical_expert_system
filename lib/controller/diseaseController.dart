@@ -21,6 +21,15 @@ class DiseaseController{
         symptomsMap[symptom.name] = Pair(symptom.probability, symptom.severity);
       });
       diseasesMap[key] = symptomsMap;
+    });
+
+    jsonMap.forEach((key, value) {
+      List<dynamic> symptomsJson = value['symptoms'];
+      Map<String, Pair<int, int>> symptomsMap = {};
+      symptomsJson.forEach((symptomJson) {
+        Symptom symptom = Symptom.fromJson(symptomJson);
+        symptomsMap[symptom.name] = Pair(symptom.probability, symptom.severity);
+      });
       tempDataset[key] = symptomsMap;
     });
   }
@@ -70,6 +79,9 @@ class DiseaseController{
   }
 
   List<Pair<String, int>> getPotentialDiseases() {
+    if (selectedSymptoms.isEmpty) {
+      return [];
+    }
     List<Pair<double, String>> temp = [];
     diseasesMap.forEach((disease, data) {
       double denom = 0.0;
@@ -81,12 +93,14 @@ class DiseaseController{
         }
       });
       double val = num / denom;
+      print(disease);
+      print(val);
       Pair<double, String> obj = Pair(val, disease);
       temp.add(obj);
     });
     temp.sort((a, b) => b.first.compareTo(a.first));
     List<Pair<String, int>> potentialDiseases = [];
-    for (int i=0; i<min(temp.length, 10); i++) {
+    for (int i=0; i<min(temp.length, 5); i++) {
       int val = (temp[i].first * 100).toInt();
       Pair<String, int> obj = Pair(temp[i].second, val);
       potentialDiseases.add(obj);

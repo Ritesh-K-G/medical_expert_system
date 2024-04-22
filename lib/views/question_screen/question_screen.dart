@@ -10,6 +10,10 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:dio/dio.dart';
 
 class question_screen extends StatefulWidget {
+  final int age;
+  final String gender;
+
+  question_screen({required this.age, required this.gender});
   @override
   _question_screen createState() => _question_screen();
 }
@@ -38,9 +42,8 @@ class _question_screen extends State<question_screen> {
     (()async =>{
       await diseaseController.loadDiseasesData()
           .then((value) async =>  await DescriptionController.loadDescription()
-          .then((value) async => print(await flutterTts.getLanguages))
-          .then((value) => print('hello world')))
           .then((value) => getCurrentSymptoms())
+          .then((value) => print('hello world')))
     })();
   }
 
@@ -71,17 +74,33 @@ class _question_screen extends State<question_screen> {
   }
 
   void terminate() async {
-    String suggestions = '';
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Analyzing data...'),
+            ],
+          ),
+        );
+      },
+    );
+    String suggestions = 'Server error!!';
     final dio = Dio();
     try {
-          // var res = await dio.post(
-          //   '',
-          //   data: {
-          //     'age': 24,
-          //     'gender': 'male',
-          //     'symptoms': diseaseController.mySelectedSymptoms()
-          // });
-          // suggestions = res.data;
+          var res = await dio.post(
+            'http://localhost:3000/user',
+            data: {
+              'age': widget.age,
+              'gender': widget.gender,
+              'symptoms': diseaseController.mySelectedSymptoms()
+          });
+          suggestions = res.data;
+          print(suggestions);
     }
     catch(e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -89,10 +108,10 @@ class _question_screen extends State<question_screen> {
       ));
     }finally{
       Navigator.pop(context);
-      Navigator.pushAndRemoveUntil(
+      Navigator.pop(context);
+      Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => showResult(diseaseController: diseaseController)),
-            (route) => false,
+        MaterialPageRoute(builder: (context) => showResult(diseaseController: diseaseController, DescriptionController: DescriptionController, suggestions: suggestions))
       );
     }
   }
@@ -192,7 +211,7 @@ class _question_screen extends State<question_screen> {
                                           ),
                                         ],
                                       ),
-                                      if (_selectedIndex == index)
+                                      if (_selectedIndex == index && _selectedIndex != (symptoms.length - 1) && _selectedIndex != (symptoms.length - 2))
                                         Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [

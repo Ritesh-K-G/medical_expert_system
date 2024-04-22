@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:medical_expert_system/constants.dart';
+import 'package:medical_expert_system/controller/descrptionController.dart';
 import 'package:medical_expert_system/controller/diseaseController.dart';
 import 'package:medical_expert_system/models/pair.dart';
-import 'package:medical_expert_system/utils/helpers/screen_size_helper.dart';
-import 'package:medical_expert_system/utils/styles/button.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class showResult extends StatefulWidget {
+  final String suggestions;
   final DiseaseController diseaseController;
-  showResult({required this.diseaseController});
+  final descriptionController DescriptionController;
+  showResult({required this.diseaseController, required this.DescriptionController, required this.suggestions});
   @override
   _showResult createState() => _showResult();
 }
 
 class _showResult extends State<showResult> {
-  int _selectedIndex = -1;
   int _expandedIndex = -1;
-  double _criticalLevl = 1.0;
   FlutterTts flutterTts = FlutterTts();
   List<String> mySelectedSymptoms = [];
   List<Pair<String, int>> myPotentialDiseases = [];
+  bool isEnglish = true;
 
   @override
   void dispose() {
@@ -50,6 +50,9 @@ class _showResult extends State<showResult> {
             IconButton(
               icon: const Icon(IconData(0xf7a9, fontFamily: 'MaterialIcons'), size: 28),
               onPressed: () {
+                setState(() {
+                  isEnglish = !isEnglish;
+                });
               },
             ),
             const SizedBox(width: 10)
@@ -66,6 +69,12 @@ class _showResult extends State<showResult> {
                     style: AppTextStyles.questionText,
                   ),
                   const SizedBox(height: 20),
+                  if (mySelectedSymptoms.isEmpty)
+                    const Text(
+                      'No symptoms selected',
+                      softWrap: true,
+                      style: AppTextStyles.chanceText,
+                    ),
                   Wrap(
                     spacing: 8.0,
                     runSpacing: 8.0,
@@ -80,7 +89,9 @@ class _showResult extends State<showResult> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                           child: Text(
-                            mySelectedSymptoms[index],
+                            isEnglish
+                              ? mySelectedSymptoms[index]
+                              : widget.DescriptionController.diseases[mySelectedSymptoms[index]]!.hindiName,
                             style: const TextStyle(
                               color: AppColors.primary,
                               fontSize: 14.0,
@@ -109,6 +120,12 @@ class _showResult extends State<showResult> {
                     style: AppTextStyles.questionText,
                   ),
                   const SizedBox(height: 20),
+                  if (myPotentialDiseases.isEmpty)
+                    const Text(
+                      'You must select some symptoms to predict your disease',
+                      softWrap: true,
+                      style: AppTextStyles.chanceText,
+                    ),
                   Expanded(
                       child: ListView.builder(
                         itemCount: myPotentialDiseases.length,
@@ -136,7 +153,9 @@ class _showResult extends State<showResult> {
                                             const SizedBox(width: 25),
                                             Expanded(
                                               child: Text(
-                                                  myPotentialDiseases[index].first,
+                                                  isEnglish
+                                                    ? myPotentialDiseases[index].first
+                                                    : widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.hindiName,
                                                   softWrap: true,
                                                   style: AppTextStyles.optionText
                                                       .copyWith(
@@ -174,12 +193,25 @@ class _showResult extends State<showResult> {
                                                     children: [
                                                       const SizedBox(width: 33),
                                                       Expanded(child: Text(
-                                                        'The temperature of the body is increased in this case',
+                                                          isEnglish
+                                                              ? widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.description
+                                                              : widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.hindiDescription,
                                                         softWrap: true,
                                                         style: AppTextStyles.descriptionText,
                                                       )),
-                                                      IconButton(onPressed: () {
-                                                        flutterTts.speak('Hi good morning');
+                                                      IconButton(onPressed: () async {
+                                                        if (isEnglish) {
+                                                          await flutterTts.setLanguage("en-US");
+                                                          flutterTts.speak(
+                                                              widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.description
+                                                          );
+                                                        }
+                                                        else {
+                                                          await flutterTts.setLanguage("hi-IN");
+                                                          flutterTts.speak(
+                                                              widget.DescriptionController.diseases[myPotentialDiseases[index].first]!.hindiDescription
+                                                          );
+                                                        }
                                                       }, icon: const Icon(Icons.volume_up_sharp))
                                                     ],
                                                   )
