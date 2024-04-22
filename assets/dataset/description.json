@@ -1,4 +1,16 @@
 {
+  "I have no other symptom": {
+    "english_name": "I have no other symptom",
+    "hindi_name": "मेरे पास कोई और लक्षण नहीं है।",
+    "english_description": "I have no other symptom",
+    "hindi_description": "मेरे पास कोई और लक्षण नहीं है।"
+  },
+  "None of These": {
+    "english_name": "None of These",
+    "hindi_name": "मेरे पास उपर विस्तृत किए गए कोई लक्षण नहीं हैं।",
+    "english_description": "None of These",
+    "hindi_description": "मेरे पास उपर विस्तृत किए गए कोई लक्षण नहीं हैं।"
+  },
   "Fatigue": {
     "english_name": "Fatigue",
     "hindi_name": "थकान",

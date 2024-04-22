@@ -1,31 +1,20 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:medical_expert_system/models/disease.dart';
-class descriptionController{
+import 'package:flutter/services.dart' show rootBundle;
+
+class descriptionController {
   // Map<String, Disease> description;
-  Future<Map<String, Disease>> loadDescription() async {
-    // Read the JSON file
-    final file = File('assets/dataset/description.json');
-    final jsonData = await file.readAsString();
+  final Map<String, Disease> diseases = {};
 
-    // Parse JSON
-    final Map<String, dynamic> parsedJson = json.decode(jsonData);
+  Future<void> loadDescription() async {
+    String jsonString =
+    await rootBundle.loadString('assets/dataset/description.json');
+    Map<String, dynamic> jsonMap = json.decode(jsonString);
 
-    // Create map of Disease objects
-    final Map<String, Disease> diseases = {};
-
-    // Loop through each entry in the parsed JSON and create Disease objects
-    parsedJson.forEach((key, value) {
-      final disease = Disease(
-        name: key,
-        description: value['english_description'],
-        hindiDescription: value['hindi_description'],
-        hindiName: value['hindi_name'],
-      );
-      diseases[key] = disease;
+    jsonMap.forEach((key, value) {
+      Disease symptom = Disease.fromJson(value);
+      diseases[key] = symptom;
     });
-
-    // return the created map
-    return diseases;
+    print(diseases);
   }
 }

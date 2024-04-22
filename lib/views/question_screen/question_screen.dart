@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:medical_expert_system/constants.dart';
+import 'package:medical_expert_system/controller/descrptionController.dart';
 import 'package:medical_expert_system/controller/diseaseController.dart';
 import 'package:medical_expert_system/utils/helpers/screen_size_helper.dart';
 import 'package:medical_expert_system/utils/styles/button.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:medical_expert_system/views/result_screen/showResult.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:dio/dio.dart';
 
 class question_screen extends StatefulWidget {
   @override
@@ -19,6 +21,10 @@ class _question_screen extends State<question_screen> {
   FlutterTts flutterTts = FlutterTts();
   late DiseaseController diseaseController;
   List<String> symptoms = [];
+  descriptionController DescriptionController = descriptionController();
+  bool isEnglish = true;
+
+
 
   @override
   void dispose() {
@@ -30,7 +36,11 @@ class _question_screen extends State<question_screen> {
     super.initState();
     diseaseController = DiseaseController();
     (()async =>{
-      await diseaseController.loadDiseasesData().then((value) => getCurrentSymptoms())
+      await diseaseController.loadDiseasesData()
+          .then((value) async =>  await DescriptionController.loadDescription()
+          .then((value) async => print(await flutterTts.getLanguages))
+          .then((value) => print('hello world')))
+          .then((value) => getCurrentSymptoms())
     })();
   }
 
@@ -60,12 +70,31 @@ class _question_screen extends State<question_screen> {
     diseaseController.deleteSymptoms(symptoms);
   }
 
-  void terminate() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => showResult(diseaseController: diseaseController)),
-          (route) => false,
-    );
+  void terminate() async {
+    String suggestions = '';
+    final dio = Dio();
+    try {
+          // var res = await dio.post(
+          //   '',
+          //   data: {
+          //     'age': 24,
+          //     'gender': 'male',
+          //     'symptoms': diseaseController.mySelectedSymptoms()
+          // });
+          // suggestions = res.data;
+    }
+    catch(e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Bad Request!!'),
+      ));
+    }finally{
+      Navigator.pop(context);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => showResult(diseaseController: diseaseController)),
+            (route) => false,
+      );
+    }
   }
 
   @override
@@ -83,6 +112,9 @@ class _question_screen extends State<question_screen> {
             IconButton(
               icon: const Icon(IconData(0xf7a9, fontFamily: 'MaterialIcons'), size: 28),
               onPressed: () {
+                setState(() {
+                  isEnglish = !isEnglish;
+                });
               },
             ),
             const SizedBox(width: 10)
@@ -138,7 +170,9 @@ class _question_screen extends State<question_screen> {
                                           const SizedBox(width: 10),
                                           Expanded(
                                             child: Text(
-                                                symptoms[index],
+                                                isEnglish ?
+                                                symptoms[index]
+                                                : DescriptionController.diseases[symptoms[index]]!.hindiName,
                                                 softWrap: true,
                                                 style: AppTextStyles.optionText
                                                 .copyWith(
@@ -188,13 +222,28 @@ class _question_screen extends State<question_screen> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               const SizedBox(width: 33),
-                                              Expanded(child: Text(
-                                                'The temperature of the body is increased in this case',
+                                              Expanded(child:
+                                              Text(
+                                                isEnglish
+                                                ? DescriptionController.diseases[symptoms[index]]!.description
+                                                    : DescriptionController.diseases[symptoms[index]]!.hindiDescription
+                                                ,
                                                 softWrap: true,
                                                 style: AppTextStyles.descriptionText,
                                               )),
-                                              IconButton(onPressed: () {
-                                                flutterTts.speak('The temperature of the body is increased in this case');
+                                              IconButton(onPressed: () async {
+                                                if (isEnglish) {
+                                                  await flutterTts.setLanguage("en-US");
+                                                  flutterTts.speak(
+                                                      DescriptionController.diseases[symptoms[index]]!.description
+                                                  );
+                                                }
+                                                else {
+                                                  await flutterTts.setLanguage("hi-IN");
+                                                  flutterTts.speak(
+                                                      DescriptionController.diseases[symptoms[index]]!.hindiDescription
+                                                  );
+                                                }
                                               }, icon: const Icon(Icons.volume_up_sharp))
                                             ],
                                           )
