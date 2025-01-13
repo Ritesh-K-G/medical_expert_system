@@ -4,6 +4,7 @@ import 'package:medical_expert_system/utils/styles/button.dart';
 import 'package:medical_expert_system/utils/styles/text.dart';
 import 'package:medical_expert_system/utils/validators/validators.dart';
 import 'package:medical_expert_system/utils/wrappers/wrappers.dart';
+import 'package:medical_expert_system/views/credits_screen/credits.dart';
 import 'package:medical_expert_system/views/question_screen/question_screen.dart';
 import 'package:medical_expert_system/views/splash_screen.dart';
 
@@ -31,12 +32,26 @@ class _homePageState extends State<homePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'Credits',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Credits()),
+              );
+            },
+          ),
+        ],
+      ),
       body: SafeArea(child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.20),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.15),
             Stack(children: [
               Material(
                 elevation: 5,

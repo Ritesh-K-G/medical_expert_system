@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:medical_expert_system/constants.dart';
-import 'package:medical_expert_system/views/homePage/homePage.dart';
-import 'package:medical_expert_system/views/question_screen/question_screen.dart';
 import 'package:medical_expert_system/views/splash_screen.dart';
 
 void main() {

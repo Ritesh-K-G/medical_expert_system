@@ -37,12 +37,11 @@ class _question_screen extends State<question_screen> {
   void initState() {
     super.initState();
     diseaseController = DiseaseController();
-    (()async =>{
-      await diseaseController.loadDiseasesData()
-          .then((value) async =>  await DescriptionController.loadDescription()
-          .then((value) => getCurrentSymptoms())
-          .then((value) => print('hello world')))
-    })();
+    (() async => {
+          await diseaseController.loadDiseasesData().then((value) async =>
+              await DescriptionController.loadDescription()
+                  .then((value) => getCurrentSymptoms()))
+        })();
   }
 
   void getCurrentSymptoms() {
@@ -88,31 +87,32 @@ class _question_screen extends State<question_screen> {
         );
       },
     );
-    String suggestions = 'Server error!!';
+    String suggestions = 'Sorry!! Server is down so it couldn\'t fetch the suggestions';
     final dio = Dio();
     try {
-          var res = await dio.post(
-            'https://medical-expert-system-backend-3.onrender.com/user',
-            data: {
-              'age': widget.age,
-              'gender': widget.gender,
-              'symptoms': diseaseController.mySelectedSymptoms()
+      var res = await dio.post(
+          'https://medical-expert-system-backend-3.onrender.com/user',
+          data: {
+            'age': widget.age,
+            'gender': widget.gender,
+            'symptoms': diseaseController.mySelectedSymptoms()
           });
-          String temp = res.data;
-          suggestions = temp.replaceAll('*', '');
-          print(suggestions);
-    }
-    catch(e) {
+      String temp = res.data;
+      suggestions = temp.replaceAll('*', '');
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Bad Request!!'),
+        content: Text('Server Down!!'),
       ));
-    }finally{
+    } finally {
       Navigator.pop(context);
       Navigator.pop(context);
       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => showResult(diseaseController: diseaseController, DescriptionController: DescriptionController, suggestions: suggestions))
-      );
+          context,
+          MaterialPageRoute(
+              builder: (context) => showResult(
+                  diseaseController: diseaseController,
+                  DescriptionController: DescriptionController,
+                  suggestions: suggestions)));
     }
   }
 
@@ -129,7 +129,8 @@ class _question_screen extends State<question_screen> {
           title: const Text('Back to Home', style: AppTextStyles.appBarText),
           actions: <Widget>[
             IconButton(
-              icon: const Icon(IconData(0xf7a9, fontFamily: 'MaterialIcons'), size: 28),
+              icon: const Icon(IconData(0xf7a9, fontFamily: 'MaterialIcons'),
+                  size: 28),
               onPressed: () {
                 setState(() {
                   isEnglish = !isEnglish;
@@ -140,7 +141,8 @@ class _question_screen extends State<question_screen> {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 20),
+          padding:
+              const EdgeInsets.only(left: 25, right: 25, top: 15, bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -152,133 +154,164 @@ class _question_screen extends State<question_screen> {
               const SizedBox(height: 20),
               Expanded(
                   child: ListView.builder(
-                    itemCount: symptoms.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Card(
-                            elevation: 0,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: _selectedIndex == index ? AppColors.primary : AppColors.borderGrey,
-                                  width: 0.5,
-                                ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _selectedIndex = (_selectedIndex == index ? -1 : index);
-                                    });
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                itemCount: symptoms.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Card(
+                        elevation: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: _selectedIndex == index
+                                  ? AppColors.primary
+                                  : AppColors.borderGrey,
+                              width: 0.5,
+                            ),
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _selectedIndex =
+                                      (_selectedIndex == index ? -1 : index);
+                                });
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          const SizedBox(width: 8),
-                                          Icon(
-                                            _selectedIndex == index ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-                                            color: _selectedIndex == index ? AppColors.primary : null,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Expanded(
-                                            child: Text(
-                                                isEnglish ?
-                                                symptoms[index]
-                                                : DescriptionController.diseases[symptoms[index]]!.hindiName,
-                                                softWrap: true,
-                                                style: AppTextStyles.optionText
-                                                .copyWith(
-                                                  color: _selectedIndex == index ? AppColors.primary : Colors.black
-                                                )
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                _expandedIndex = _expandedIndex == index ? -1 : index;
-                                              });
-                                            },
-                                            icon: Icon(
-                                              _expandedIndex == index ? Icons.expand_less : Icons.expand_more,
-                                            ),
-                                          ),
-                                        ],
+                                      const SizedBox(width: 8),
+                                      Icon(
+                                        _selectedIndex == index
+                                            ? Icons.radio_button_checked
+                                            : Icons.radio_button_unchecked,
+                                        color: _selectedIndex == index
+                                            ? AppColors.primary
+                                            : null,
+                                        size: 20,
                                       ),
-                                      if (_selectedIndex == index && _selectedIndex != (symptoms.length - 1) && _selectedIndex != (symptoms.length - 2))
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(height: 8.0),
-                                            Text(
-                                              'Severity level: $_criticalLevl',
-                                              style: AppTextStyles.formLabelStyle,
-                                            ),
-                                            const SizedBox(height: 8.0),
-                                            Slider(
-                                              value: _criticalLevl,
-                                              min: 1.0,
-                                              max: 3.0,
-                                              divisions: 2,
-                                              onChanged: (value) {
-                                                setState(() {
-                                                  _criticalLevl = value;
-                                                });
-                                              },
-                                            ),
-                                          ],
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Text(
+                                            isEnglish
+                                                ? symptoms[index]
+                                                : DescriptionController
+                                                    .diseases[symptoms[index]]!
+                                                    .hindiName,
+                                            softWrap: true,
+                                            style: AppTextStyles.optionText
+                                                .copyWith(
+                                                    color:
+                                                        _selectedIndex == index
+                                                            ? AppColors.primary
+                                                            : Colors.black)),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _expandedIndex =
+                                                _expandedIndex == index
+                                                    ? -1
+                                                    : index;
+                                          });
+                                        },
+                                        icon: Icon(
+                                          _expandedIndex == index
+                                              ? Icons.expand_less
+                                              : Icons.expand_more,
                                         ),
-                                      if (_expandedIndex == index)
-                                        Padding(
-                                          padding: const EdgeInsets.all(2.0),
-                                          child: Row(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(width: 33),
-                                              Expanded(child:
-                                              Text(
-                                                isEnglish
-                                                ? DescriptionController.diseases[symptoms[index]]!.description
-                                                    : DescriptionController.diseases[symptoms[index]]!.hindiDescription
-                                                ,
-                                                softWrap: true,
-                                                style: AppTextStyles.descriptionText,
-                                              )),
-                                              IconButton(onPressed: () async {
-                                                if (isEnglish) {
-                                                  await flutterTts.setLanguage("en-US");
-                                                  flutterTts.speak(
-                                                      DescriptionController.diseases[symptoms[index]]!.description
-                                                  );
-                                                }
-                                                else {
-                                                  await flutterTts.setLanguage("hi-IN");
-                                                  flutterTts.speak(
-                                                      DescriptionController.diseases[symptoms[index]]!.hindiDescription
-                                                  );
-                                                }
-                                              }, icon: const Icon(Icons.volume_up_sharp))
-                                            ],
-                                          )
-                                        ),
+                                      ),
                                     ],
                                   ),
-                                ),
+                                  if (_selectedIndex == index &&
+                                      _selectedIndex != (symptoms.length - 1) &&
+                                      _selectedIndex != (symptoms.length - 2))
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 8.0),
+                                        Text(
+                                          'Severity level: $_criticalLevl',
+                                          style: AppTextStyles.formLabelStyle,
+                                        ),
+                                        const SizedBox(height: 8.0),
+                                        Slider(
+                                          value: _criticalLevl,
+                                          min: 1.0,
+                                          max: 3.0,
+                                          divisions: 2,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _criticalLevl = value;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  if (_expandedIndex == index)
+                                    Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(width: 33),
+                                            Expanded(
+                                                child: Text(
+                                              isEnglish
+                                                  ? DescriptionController
+                                                      .diseases[
+                                                          symptoms[index]]!
+                                                      .description
+                                                  : DescriptionController
+                                                      .diseases[
+                                                          symptoms[index]]!
+                                                      .hindiDescription,
+                                              softWrap: true,
+                                              style:
+                                                  AppTextStyles.descriptionText,
+                                            )),
+                                            IconButton(
+                                                onPressed: () async {
+                                                  if (isEnglish) {
+                                                    await flutterTts
+                                                        .setLanguage("en-US");
+                                                    flutterTts.speak(
+                                                        DescriptionController
+                                                            .diseases[symptoms[
+                                                                index]]!
+                                                            .description);
+                                                  } else {
+                                                    await flutterTts
+                                                        .setLanguage("hi-IN");
+                                                    flutterTts.speak(
+                                                        DescriptionController
+                                                            .diseases[symptoms[
+                                                                index]]!
+                                                            .hindiDescription);
+                                                  }
+                                                },
+                                                icon: const Icon(
+                                                    Icons.volume_up_sharp))
+                                          ],
+                                        )),
+                                ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 10)
-                        ],
-                      );
-                    },
-                  )
-              ),
+                        ),
+                      ),
+                      const SizedBox(height: 10)
+                    ],
+                  );
+                },
+              )),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -287,12 +320,10 @@ class _question_screen extends State<question_screen> {
                     onPressed: () async {
                       if (_selectedIndex == (symptoms.length - 1)) {
                         terminate();
-                      }
-                      else if (_selectedIndex == (symptoms.length - 2)) {
+                      } else if (_selectedIndex == (symptoms.length - 2)) {
                         deleteSymptom();
                         getCurrentSymptoms();
-                      }
-                      else {
+                      } else {
                         selectSymptom(symptoms[_selectedIndex]);
                         getCurrentSymptoms();
                       }
@@ -315,7 +346,6 @@ class _question_screen extends State<question_screen> {
               )
             ],
           ),
-        )
-    );
+        ));
   }
 }
